@@ -1,0 +1,41 @@
+{% extends "employee_register/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+    {{form.fullname|as_crispy_field}}
+    {{form.mobile|as_crispy_field}}
+    {{form.emp_code|as_crispy_field}}
+<!--    {{form.image|as_crispy_field}}-->
+    <div class="row">
+        <div class="col-md-8">
+            <a href="http://127.0.0.1:8000" id="back-button" class="button">Back</a>
+            <form id="upload_file" enctype="multipart/form-data">
+            <input type="file" name="uploadFile" accept=".pdf,.txt,.html,.doc,.docx,.jpeg" multiple>
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Submit</button>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'employee_list' %}" class="btn btn-secondary btn-block btn-lg">
+                <i class="fas fa-stream"></i> Back to list
+            </a>
+        </div>
+    </div>
+    <script>
+    const uploadForm = document.querySelector('#upload_file');
+
+    uploadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(uploadForm);
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'http://127.0.0.1:8000/uploadJD');
+      xhr.send(formData);
+    });
+    </script>
+
+</form>
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends "employee_register/base.html" %}
+
+
+{% block content %}
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Full Name</td>
+            <td>Mobile</td>
+            <td>
+                <a href="{% url 'employee_insert' %}" class="btn btn-outline-success">
+                    <i class="fas fa-plus"></i> Add New
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for employee in employee_list %}
+            <tr>
+                <td>{{employee.fullname}}</td>
+                <td>{{employee.mobile}}</td>
+                <td>
+                    <form action="{% url 'employee_update' employee.id 'update' %}" method="PUT" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" value="update">
+                            <i class="far fa-edit fa-lg"></i>
+                        </button>
+                    </form>
+                    <form action="{% url 'employee_delete' employee.id 'delete' %}" method="DELETE" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn" value="delete">
+                            <i class="far fa-trash-alt fa-lg text-danger float-right"></i>
+                        </button>
+                    </form>
+
+                </td>
+            </tr>
+        {% endfor %}
+
+
+    </tbody>
+</table>
+
+
+<!--pagination-->
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    {% if employee_list.has_previous %}
+    <li class="page-item ">
+      <a class="page-link" href="/list/?page={{employee_list.previous_page_number}}" tabindex="-1">Previous</a>
+    </li>
+    {% endif %}
+     {% for n in pagesList %}
+    <li class="page-item"><a class="page-link" href="/list/?page={{n}}">{{n}}</a></li>
+      {% endfor %}
+      {% if employee_list.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="/list/?page={{employee_list.next_page_number}}">Next</a>
+    </li>
+      {% endif %}
+  </ul>
+</nav>
+
+{% endblock content %}
